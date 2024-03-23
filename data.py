@@ -1,17 +1,38 @@
 import csv
-import os 
+import os
+import copy
 
 class Data:
     def __init__(self,periodsPerDay,noOfDays):
+        self.noOfDays = noOfDays
+        self.periodsPerDay = periodsPerDay
+
+        # Should get rid of this
         self.emptyPossiblePeriods = [x for x in range(0,periodsPerDay)]
 
+        self.possibleIndexes = {}
+
+
+        # Data for creating the Time table
         self.teachers = [
-            {'name':'Karuna','subjects':['math'],'grades':[11,12],'hoursPerDay':5}, 
-            {'name':'Shafeela','subjects':['chem'],'grades':[11,12],'hoursPerDay':5},
-            {'name':'Vidhya','subjects':['phys'],'grades':[11,12],'hoursPerDay':5},
-            {'name':'Deepa','subjects':['comp'],'grades':[11,12],'hoursPerDay':5},
-            {'name':'Ashley','subjects':['skil'],'grades':[11,12],'hoursPerDay':5},
-            {'name':'Anitha','subjects':['engl'],'grades':[11,12],'hoursPerDay':5}
+            {'name':'Karuna','subjects':['math'],'classes':['11A','11B','11C'],'hoursPerDay':5},
+            {'name':'Reshma','subjects':['math'],'classes':['11A','11B','11C'],'hoursPerDay':5},
+
+            {'name':'Shafeela','subjects':['chem'],'classes':['11A','11B'],'hoursPerDay':5},
+            {'name':'Shrithi','subjects':['chem'],'classes':['11A','11C'],'hoursPerDay':5},
+            {'name':'Krithika','subjects':['chem'],'classes':['11B','11C'],'hoursPerDay':5},
+
+            {'name':'Vidhya','subjects':['phys'],'classes':['11A','11B'],'hoursPerDay':5},
+            {'name':'Anuradha','subjects':['phys'],'classes':['11B','11C'],'hoursPerDay':5},
+            {'name':'Lida','subjects':['phys'],'classes':['11A','11C'],'hoursPerDay':5},
+
+            {'name':'Deepa','subjects':['comp'],'classes':['11A'],'hoursPerDay':5},
+            {'name':'Judith','subjects':['comp'],'classes':['11A'],'hoursPerDay':5},
+            {'name':'Shibu','subjects':['comp'],'classes':['11C'],'hoursPerDay':5},
+
+            {'name':'Anitha','subjects':['engl'],'classes':['11A','11B'],'hoursPerDay':5},
+            {'name':'Irine','subjects':['engl'],'classes':['11C'],'hoursPerDay':5},
+
         ]
         
         self.practicals = [
@@ -38,20 +59,52 @@ class Data:
         ]
 
         self.data = {}
-        self.table = []
 
+        # Initialization of Variables
         self.resetTeacherPeriods()
+        self.createEmptyData()
 
-    def createTable(self):
-        week = self.table
+    # Creates the empty data in the beginning 
+    def createEmptyData(self):
+        table = []
+        # print(temp)
         for dayNum in range(1,self.noOfDays+1):
-            week.append([""]*self.periodsPerDay)
-        self.table = week
+            table.append(["" for x in range(self.periodsPerDay+1)])
+            # print(table)
 
+        for clas in self.classes:
+            for div in range(65,ord(clas['maxSection'])+1):
+                self.data[str(clas['grade'])+str(chr(div))] = copy.deepcopy(table)
+    
+
+    # Returns a List of Empty Spots in the time table
+    # Its crying for optimization need to optimize it
+    def getPossibleIndexes(self):
+        tempDict = {}
+        tempWeek = []
+        tempDay = []
+        for clas in self.data:
+            tempWeek = []
+            for j,day in enumerate(self.data[clas]):
+                tempDay = []
+                for i,period in enumerate(self.data[clas][j]):
+                    if period == "":
+                        tempDay.append(i)
+                        
+                tempWeek.append(tempDay.copy())
+
+            tempDict[clas] = tempWeek.copy()
+        self.possibleIndexes = tempDict
+        return tempDict
+
+
+    # Reset the teachers Periods for each teacher once one teacher is done
     def resetTeacherPeriods(self):
         for x in self.teachers:
             x['possiblePeriods'] = self.emptyPossiblePeriods[:]
 
+
+    # Create Empty files to save it later
     def createEmptyFiles(self):
         # if os.path.exists('Classes'):
         #     os.remove('Classes')

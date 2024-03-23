@@ -7,44 +7,48 @@ class Timetable(Data):
         self.periodsPerDay = periodsPerDay
         self.noOfDays = noOfDays
 
+    # Assigning special periods like pe
     def assignSpecialPeriods(self):
-        
-        pass
+        possibleDict = {x:2 for x in range(0,self.periodsPerDay)}
+        possibleIndex = []
 
-    def assignSubjects(self):
-        week = self.table
-        repeatedSubjects = []
-        
-        for dayNum in range(len(week)):
-            day = week[dayNum]
-            possibleIndex = [x for x in range(0,self.periodsPerDay)]
+        for x in possibleDict:
+            possibleIndex.extend([x]*possibleDict[x])
+
+        for clas in self.data:
+            day = rand.randint(0,self.noOfDays-1)
             
-            for periodRef in self.periods:
-                noOfPeriod = rand.choice([periodRef['minPerDay'][0]]*periodRef['minPerDay'][1] + [periodRef['maxPerDay'][0]]*periodRef['maxPerDay'][1])
-                
-                if periodRef['subject'] in repeatedSubjects:
-                    noOfPeriod = 1
-                
-                for x in range(noOfPeriod):
-                    index = rand.choice(possibleIndex)
-                    possibleIndex.remove(index)
-                    
-                    week[dayNum][index] = periodRef["subject"]
-                
-                if noOfPeriod > 1:
-                    repeatedSubjects.append(periodRef['subject'])
-                    # print(periodRef['subject'])
-        self.table = week
+            index = rand.choice(possibleIndex)
+            self.data[clas][day][index] = "PE"
+            possibleIndex.remove(index)
+            pass
 
+    # Assign period to the teacher according to the classes she/he teaches
+    def assignSubjects(self):
+        for day in range(0,self.noOfDays):
+            self.getPossibleIndexes()
+            for teacher in self.teachers:
+                pickedClass = rand.choice(teacher["classes"])
+                pickedPeriod = rand.choice(self.possibleIndexes[pickedClass][day])
+
+                self.data[pickedClass][day][pickedPeriod] = teacher['subjects'][0]
+                self.possibleIndexes[pickedClass][day].remove(pickedPeriod)
+                print(self.possibleIndexes[pickedClass][day])
+                pass
+
+
+    # Print the time table along with the classes and days
     def printTimetable(self):
-        for x in self.table:
-            print(x)
+        days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'] 
+        for x in self.data:
+            print("--",x,"--")
+            for i,y in enumerate(self.data[x]):
+                print(days[i],y)
+            print("\n")
 
+    # Main Generating Function
     def generateTimetable(self):
         # print(self.teachers[0])
 
-        # self.createEmptyFiles()
-        self.createTable()
-        
         self.assignSpecialPeriods()
-        # self.assignSubjects()
+        self.assignSubjects()
