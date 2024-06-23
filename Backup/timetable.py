@@ -1,50 +1,72 @@
 import random as rand
 from data import *
+import copy
 
 class Timetable(Data):
     def __init__(self,periodsPerDay,noOfDays):
-        super().__init__()
-        self.periodsPerDay = periodsPerDay
-        self.noOfDays = noOfDays
+        super().__init__(periodsPerDay,noOfDays)
 
-        self.table = []
+    # Assign skill period for a specific grade together
+    def assignSkillPeriod(self):
+        classes = self.getListClasses().copy()
+        for period in self.skillSubjectPeriod:
+            self.skillDay = [False for x in range(0,self.noOfDays)]
+            for x in range(period['periodsPerWeek']):
+                choosenPeriod = rand.choice(self.getSkillAcailablity())
+                for section in self.getListOfSections(period['grade']):
+                    self.data[section][choosenPeriod[0]][choosenPeriod[1]] = period['subject']
+                    self.skillAvailability[choosenPeriod[0]][choosenPeriod[1]] = True
+                    self.skillDay[choosenPeriod[0]] = True
+                    for teacher in period['teachers']:
+                        self.teacherAvailablity[teacher][self.days[choosenPeriod[0]]][choosenPeriod[1]] = section
 
-    def createTable(self):
-        week = self.table
-        for dayNum in range(1,self.noOfDays+1):
-            week.append([""]*self.periodsPerDay)
-        self.table = week
+    def assignPEPeriod(self):
+        for subject in self.specialPeriods:
+            for classes in subject['classes']:
+                choosenPeriod = rand.choice(self.removeOccupiedPE(self.getFullGroundAvailablity(False),classes))
+                for section in classes:
+                    if self.data[section][choosenPeriod[0]][choosenPeriod[1]]:
+                        raise Exception("Place Already taken by Skill, if this come then -4hrs by debugging")
+                    self.data[section][choosenPeriod[0]][choosenPeriod[1]] = subject['subject']
+                    self.teacherAvailablity[subject['teacher']][self.days[choosenPeriod[0]]][choosenPeriod[1]] = section
+                    self.addGroundPeriod(choosenPeriod[0],choosenPeriod[1],2)
 
-    def assignSubjects(self):
-        week = self.table
-        repeatedSubjects = []
-        
-        for dayNum in range(len(week)):
-            day = week[dayNum]
-            possibleIndex = [x for x in range(0,self.periodsPerDay)]
-            
-            for periodRef in self.periods:
-                noOfPeriod = rand.choice([periodRef['minPerDay'][0]]*periodRef['minPerDay'][1] + [periodRef['maxPerDay'][0]]*periodRef['maxPerDay'][1])
-                
-                if periodRef['subject'] in repeatedSubjects:
-                    noOfPeriod = 1
-                
-                for x in range(noOfPeriod):
-                    index = rand.choice(possibleIndex)
-                    possibleIndex.remove(index)
-                    
-                    week[dayNum][index] = periodRef["subject"]
-                
-                if noOfPeriod > 1:
-                    repeatedSubjects.append(periodRef['subject'])
-                    # print(periodRef['subject'])
-        self.table = week
+    # Assigning special periods like pe
+    def assignSpecialPeriods(self):
+        self.assignSkillPeriod()
+        self.assignPEPeriod()
+    
+    # Print the time table along with the classes and days
+    def printTimetable(self,plain = False):
+        """Prints the Generated Time Table.
+        Args:
+            plain::bool
+                Wheather to print plain or with only the subjects
+        """
+        for x in self.data:
+            print("--",x,"--")
+            temp = []
+            if not plain:
+                for i,y in enumerate(self.data[x]):
+                    for z in y:
+                        try:
+                            temp.append(z['subject'])
+                        except:
+                            temp.append(z)
+                    print(self.days[i],temp," -",temp.count(""))
+                    temp = []
+            else:
+                for x in self.data:
+                    for y in self.data[x]:
+                        print(y," -",temp.count(""))
+                    print()
+            print("\n")
 
-    def printTimetable(self):
-        for x in self.table:
-            print(x)
-
+    # Main Generating Function
     def generateTimetable(self):
-        self.createEmptyFiles()
-        self.createTable()
-        self.assignSubjects()
+        # print(self.teachers[0])
+
+        self.assignSpecialPeriods()
+        # self.assignSubjectsAccTeachers()
+        # self.getPossibleIndexes()
+        # print(self.setPeriod('11A',0,0,'pe','Karthik'))

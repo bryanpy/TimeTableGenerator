@@ -1,0 +1,56 @@
+def assignSubjectsAccTeachers(self):
+        for day in range(0,self.noOfDays):
+            self.getPossibleIndexes()
+            for teacher in self.teachers:
+                pickedClass = rand.choice(teacher["classes"])
+                pickedPeriod = rand.choice(self.possibleIndexes[pickedClass][day])
+                # self.setPeriod(pickedClass,day,pickedPeriod,teacher['subjects'][0],teacher['name'])
+                self.possibleIndexes[pickedClass][day].remove(pickedPeriod)
+                pass
+                    
+        # for clas in classes:
+        #     teachers = self.getSubjectTeachers(clas,"PE")
+        #     print(teachers)
+        #     choosenPeriod = rand.choice(self.getFullGroundAvailablity(False))
+        #     self.data[clas][choosenPeriod[0]][choosenPeriod[1]] = "PE"
+        #     self.addGroundPeriod(choosenPeriod[0],choosenPeriod[1])
+
+    
+        
+
+    # Assign period to the teacher according to the classes she/he teaches
+    
+    
+    # Assign subject for each class according to all the available subjects
+    def assignSubjectsAccPeriods(self):
+        for day in range(0,self.noOfDays):
+            self.getPossibleIndexes()
+            for clas in self.classes:
+                for pickedClass in self.getListOfSections(clas['grade'],clas['maxSection']):
+                    for period in self.periods:
+                        pickedPeriod = rand.choice(self.possibleIndexes[pickedClass][day])
+
+                        self.data[pickedClass][day][pickedPeriod] = period['subject']
+                        self.possibleIndexes[pickedClass][day].remove(pickedPeriod)
+                        pass
+    
+    # Assign period to the teacher according to the subject available and the teachers
+    def assignSubjectsHybrid(self):
+        for day in range(0,self.noOfDays):
+            self.getPossibleIndexes()
+            for clas in self.classes:
+                for pickedClass in self.getListOfSections(clas['grade'],clas['maxSection']):
+                    for subject in self.periods:
+                        pickedPeriod = rand.choice(self.possibleIndexes[pickedClass][day])
+                        print(pickedPeriod)
+                        print(self.data[pickedClass][day][pickedPeriod])
+                        # self.possibleIndexes[pickedClass][day].remove(pickedPeriod)
+                        pass
+
+            # for teacher in self.teachers:
+            #     pickedClass = rand.choice(teacher["classes"])
+            #     pickedPeriod = rand.choice(self.possibleIndexes[pickedClass][day])
+
+            #     self.data[pickedClass][day][pickedPeriod] = teacher['subjects'][0]
+            #     self.possibleIndexes[pickedClass][day].remove(pickedPeriod)
+            #     pass
