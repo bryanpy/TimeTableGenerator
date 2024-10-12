@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Arvo:ital,wght@0,400;0,700;1,400;1,700&family=Graduate&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Graduate&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Arvo:ital,wght@0,400;0,700;1,400;1,700&family=Graduate&family=Rubik+Mono+One&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/table.css') }}">
+    <title>Timetable</title>
+</head>
+<body>
+    <h1 style="text-align: center;">Weekly Timetable</h1>
+    {% for class in data %}
+        <div>
+            <h2 style="text-align: center;">{{class}}</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <td>{{class}}</td>
+                        {% for ord in table.getOrdinalsList() %}
+                            <th>{{ord}}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for day in data[class] %}
+                    <tr>
+                        <th>{{ table.days[loop.index0] }}</th>
+                        {% for subject in day %}
+                            <td>{{subject}}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endfor %}
+</body>
+</html>

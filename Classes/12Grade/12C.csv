@@ -1,1 +1,6 @@
-"['name', 'age', 'country']","['Oladele Damilola', '40', 'Nigeria']","['Alina Hricko', '23Ukraine']","['Isabel Walter', '50United Kingdom']"
+12C,1,2,3,4,5,6,7,8
+Sun,Eng,Math,Chem,Math,Eng,Phy,Skill,Comp
+Mon,Prac,Prac,Math,Comp,Chem,Phy,Skill,Eng
+Tue,Math,Chem,P_Comp,P_Comp,Phy,Chem,Eng,Comp
+Wed,Phy,Comp,Eng,P_Bio,P_Bio,Math,Chem,PE
+Thu,Math,Comp,Comp,Eng,Chem,Skill,Chem,Phy

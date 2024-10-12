@@ -9,7 +9,7 @@ class Timetable(Data):
     # Assign skill period for a specific grade together
     def assignSkillPeriod(self):
         classes = self.getListClasses().copy()
-        for period in self.skillSubjectPeriod:
+        for period in self.skillSubjectPeriods:
             self.skillDay = [False for x in range(0,self.noOfDays)]
             for x in range(period['periodsPerWeek']):
                 choosenPeriod = rand.choice(self.getSkillAcailablity())
@@ -21,7 +21,7 @@ class Timetable(Data):
                         self.teacherAvailablity[teacher][self.days[choosenPeriod[0]]][choosenPeriod[1]] = section
 
     def assignPEPeriod(self):
-        for subject in self.specialPeriods:
+        for subject in self.PEPeriods:
             for classes in subject['classes']:
                 choosenPeriod = rand.choice(self.removeOccupiedPE(self.getFullGroundAvailablity(False),classes))
                 for section in classes:

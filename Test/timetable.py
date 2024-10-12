@@ -23,7 +23,7 @@ class Timetable(Data):
     # Teacher thinky, (Availablity)
     def assignPEPeriod(self):
         """
-        Assign PE periods too classes according to the data provided
+        Assign PE periods too the 
         """
         for subject in self.PEPeriods:
             for classes in subject['classes']:
@@ -57,6 +57,7 @@ class Timetable(Data):
                             self.labAvailability[lab][choosenPeriod[0]][choosenPeriod[1]+con] = True
                         for teacher in classes[1]:
                             self.teacherAvailablity[teacher][self.days[choosenPeriod[0]]][choosenPeriod[1]+con] = clas
+
     
     # Assigning special periods like pe
     def assignSpecialPeriods(self):
@@ -75,7 +76,6 @@ class Timetable(Data):
                         available = self.getAvailablePeriodsOfDay(clas,day)
                         teacher = self.getPossibleTeacher(clas,period['subject'])
                         available = self.removeTeacherNotAvailable(available,day,teacher)
-                        available = self.removeTeacherNotAvailable(available,day,teacher)
                         try:
                             choosenPeriod = rand.choice(available)
                             self.data[clas][day][choosenPeriod] = period['subject']
@@ -84,6 +84,7 @@ class Timetable(Data):
                             pass
             
                     
+
     # Print the time table along with the classes and days
     def printTimetable(self,plain = False):
         """
@@ -108,42 +109,8 @@ class Timetable(Data):
                     print()
             print("\n")
 
-    def getOrdinalsList(self):
-        data = self.ordinals[0:self.periodsPerDay]
-        return data
-    
-    def getDaysList(self):
-        data = self.days[0:self.noOfDays]
-        return data
-
-    def getData(self):
-        # data = {}
-        # for index,day in enumerate(self.data['11A']):
-        #    data[self.days[index]] = day
-        # return data
-        return self.data
-
     # Main Generating Function
     def generateTimetable(self):
         self.assignSpecialPeriods()
         self.assignNormalPeriods()
-        # self.getAvailableTeacher("Sun",2)
-        
-        # print(self.getAvailableTeacher("Thu",0))
-
-        # print(self.getTeacherFreePeriodDay("Deepa","Sun"))
-
-        # print("Deepa")
-        # hours = 0
-        # for index,x in enumerate(self.getTeacherFreePeriodWeek("Deepa")):
-            
-        #     for y in self.days[index],self.getTeacherFreePeriodWeek("Deepa")[x]:
-        #         if y != False:
-        #             hours+= 1
-        # print(hours,"Hours")
-
-        # for period in self.getFreeContinuesClasses(4):
-        #     if not period == "":
-        #         print(f'Class: {period[2]}, Day: {self.days[period[0]]}, Period: {period[1]}')
-        #     else:
-        #         print()
+        print(self.getAvailableTeacher("Thu",8))

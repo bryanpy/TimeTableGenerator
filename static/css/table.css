@@ -1,0 +1,45 @@
+*{
+    font-family: "Graduate", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+table{
+    width: 50%;
+    border-collapse: collapse;
+    margin: 20px auto;
+}
+
+th,td{
+    border: 1px solid black;
+    padding: 10px;
+    text-align: center;
+    font-family: "Arvo", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+th{
+    font-family: "Arvo", serif;
+    font-weight: 700;
+    font-style: normal;
+
+    font-weight: 700;
+    font-style: normal;
+}
+
+th{
+    background-color: #f2f2f2;
+}
+
+h1{
+    font-family: "Rubik Mono One", monospace;
+    font-weight: 400;
+    font-style: normal;
+}
+
+h2{
+    font-family: "Arvo", serif;
+    font-weight: 700;
+    font-style: normal;
+}

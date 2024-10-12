@@ -10,8 +10,6 @@ class Data:
         self.maxClassesInGround = 2
 
         self.days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
-        self.ordinals = ['First','Second','Third','Fourth','Fifth','Sixth','Seventh','Eighth','Ninth','Tenth']
-        
 
         # Should get rid of this
         self.emptyPossiblePeriods = [x for x in range(0,periodsPerDay)]
@@ -21,9 +19,14 @@ class Data:
     
         # List of all classes in the school
         self.classes = [
+            # {'grade':7,'maxSection':'E'},
+            # {'grade':8,'maxSection':'E'},
+            # {'grade':9,'maxSection':'E'},
+            # {'grade':10,'maxSection':'E'},
             {'grade':11,'maxSection':'E'},
             {'grade':12,'maxSection':'E'}
         ]
+
         self.teachers = ['Karuna','Reshma','Moses','Shafeela','Shruthi','Krithika','Vidhya','Anuradha','Lida','Vijitha','Ashwathy','Deepa','Judith','Shibu','Anitha','Irine','Ameen','Karthik','Ashley','Kavitha','Ruskin']
         self.labs = ['Chem','Phy','Bio','Comp',"SComp"]
 
@@ -56,8 +59,8 @@ class Data:
 
         self.PEPeriods = [
             # Create it so that it assignes according to the period taken py the pe teachers
-            {'teacher':'Karthik','subject':'PE','classes':[['11A','11B'],['11C','11D','11E']],'periodsPerDay':5},
-            {'teacher':'Ameen','subject':'PE','classes':[['12A','12B'],['12C','12D','12E']],'periodsPerDay':5},
+            {'teacher':'Karthik','subject':'PE','classes':[['11A','11B'],['11C','11D','11E']]},
+            {'teacher':'Ameen','subject':'PE','classes':[['12A','12B'],['12C','12D','12E']]},
         ]
 
         self.skillSubjectPeriods = [
@@ -80,6 +83,7 @@ class Data:
             {'subject':'Phy','classes':['11A','11B','11C','12A','12B','12C'],'maxPerDay':[2,1],'noPerWeek':6,'repeatPerWeek':1},
             {'subject':'Comp','classes':['11A','11B','11C','12A','12B','12C'],'maxPerDay':[2,1],'noPerWeek':6,'repeatPerWeek':1},
             {'subject':'Eng','classes':['11A','11B','11C','12A','12B','12C'],'maxPerDay':[2,1],'noPerWeek':6,'repeatPerWeek':1},
+            {'subject':'Bio','classes':['11B','11C','12B','12C'],'maxPerDay':[2,1],'noPerWeek':6,'repeatPerWeek':1},
         ]
 
         # self.specialPeriods = [
@@ -103,29 +107,11 @@ class Data:
     # Creates the empty data in the beginning
     def createEmptyData(self):
         table = []
-        # print(temp)
         for dayNum in range(1,self.noOfDays+1):
             table.append(["" for x in range(self.periodsPerDay)])
-
         for clas in self.classes:
             for div in range(65,ord(clas['maxSection'])+1):
                 self.data[str(clas['grade'])+str(chr(div))] = copy.deepcopy(table)
-
-    def getListClasses(self):
-        classes = []
-        for clas in self.classes:
-            for div in range(65,ord(clas['maxSection'])+1):
-                classes.append(str(clas['grade'])+str(chr(div)))
-        return classes
-
-    def getListOfSections(self,grade):
-        tempList = []
-        for gradeList in self.classes:
-            if gradeList['grade'] == grade:
-                for div in range(65,ord(gradeList['maxSection'])+1):
-                    pickedClass = str(grade)+str(chr(div))
-                    tempList.append(pickedClass)
-        return tempList
 
     # Reset the teachers Periods for each teacher for all the days  
     def initiateTeachers(self):
@@ -214,6 +200,7 @@ class Data:
         return(temp)
     
 
+
     def getAvailablePeriodsOfDay(self,clas,day):
         temp = []
         for index,period in enumerate(self.data[clas][day]):
@@ -227,9 +214,10 @@ class Data:
             if teacher['subject'] == subject and clas in teacher['classes']:
                 temp.append(teacher['name'])
         if len(temp)>1:
+            print(temp)
             raise
         return temp[0]
-
+    
     def getAvailableTeacher(self,day,period):
         temp = []
         for teacher in self.teachers:
@@ -237,84 +225,130 @@ class Data:
                 temp.append(teacher)
         return temp
 
-    def getTeacherFreePeriodWeek(self,teacher):
-        return self.teacherAvailablity[teacher]
-
-    def getTeacherFreePeriodDay(self,teacher,day):
-        return self.teacherAvailablity[teacher][day]
-
-    def isTeacherFree(self,teacher,day,period):
-        if self.teacherAvailablity[teacher][day][period+1]:
-            return False
-        else:
-            return True
-
     def removeTeacherNotAvailable(self,lst,day,teacher):
         temp = []
         for period in lst:
             if not self.teacherAvailablity[teacher][self.days[day]][period]:
                 temp.append(period)
         return temp
-    
-    def getFreeClassesDay(self,day,period):
-        temp = []
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    # Returns a List of Empty Spots in the time table
+    # Its crying for optimization need to optimize it
+    def getPossibleIndexes(self):
+        tempDict = {}
+        tempWeek = []
+        tempDay = []
         for clas in self.data:
-            for subject in self.data[clas][day]:
-                if subject in ['PE','Prac','P_Bio','P_Comp']:
-                    temp.append(f'{clas},Day:{self.days[day]},Period={period+1}')
-        return temp
+            tempWeek = []
+            for j,day in enumerate(self.data[clas]):
+                tempDay = []
+                for i,period in enumerate(self.data[clas][j]):
+                    if period == "":
+                        tempDay.append(i)
+                tempWeek.append(tempDay.copy())
 
-    def getFreeContinuesClasses(self,day = None):
-        temp = []
-        continuousTemp = []
-
-        for clas in self.data:
-            if day == None:
-                for day in range(self.noOfDays):
-                    for period,subject in enumerate(self.data[clas][day]):
-                        if subject in ['PE','Prac','P_Bio','P_Comp']:
-                            temp.append((day,period,clas))
-            else:
-                for period,subject in enumerate(self.data[clas][day]):
-                        if subject in ['PE','Prac','P_Bio','P_Comp']:
-                            temp.append((day,period,clas))
-            
-        continuousTemp = []
-        for item in temp:
-            if (item[0],item[1]+1,item[2]) in temp:
-                continuousTemp.append(item)
-                continuousTemp.append((item[0],item[1]+1,item[2]))
-            continuousTemp.append("")
-
-        return continuousTemp
+            tempDict[clas] = tempWeek.copy()
+        self.possibleIndexes = tempDict
+        return tempDict
 
     # Create Empty files to save it later
-    def saveAsCSV(self):
+    def createEmptyFiles(self):
+        # if os.path.exists('Classes'):
+        #     os.remove('Classes')
+
         os.mkdir('Classes')
-        
-        for clas in self.classes:
+        for x in self.classes:
             os.chdir('Classes')
-            os.mkdir(str(clas['grade'])+"Grade")
+            os.mkdir(str(x['grade'])+"Grade")
             os.chdir('../')
 
-            for classData in self.data:
-                grade = ''.join([i for i in classData if i.isdigit()])
-                
-                if int(grade) == int(clas['grade']):
-                    filePath = "Classes/"+str(grade)+"Grade/"+classData+".csv"
+            for y in range(65,ord(x['maxSection'])+1):
+                filePath = "Classes/"+str(x['grade'])+"Grade/"+str(x['grade'])+str(chr(y))+".csv"
 
-                    with open(filePath, 'w', newline='') as file:
-                        writer = csv.writer(file)
-
-                        header = [classData]
-                        for period in range(self.periodsPerDay):
-                            header.append(period+1)
-                        writer.writerow(header)
-
-                        temp = []
-                        for index,day in enumerate(self.data[classData]):
-                            temp.append([self.days[index]]+day)
-
-                        row_list = temp
-                        writer.writerows(row_list)
+                with open(filePath, 'w', newline='') as file:
+                    writer = csv.writer(file)
+                    row_list = [
+                        ["name", "age", "country"], 
+                        ["Oladele Damilola", "40", "Nigeria"], 
+                        ["Alina Hricko", "23" "Ukraine"], 
+                        ["Isabel Walter", "50" "United Kingdom"],
+                    ]
+                    writer.writerow(row_list)
     # Create a list and return a list of all classes and sections together in the form of a string in list, ie.['11A','11B','12A','12B'].
+    
+    def getListClasses(self):
+        classes = []
+        for clas in self.classes:
+            for div in range(65,ord(clas['maxSection'])+1):
+                classes.append(str(clas['grade'])+str(chr(div)))
+        return classes
+
+    # Create a list and return a list of grade and sections together in the form of a string in list for a specific grade, ie.['11A','11B'].
+    def getListOfSections(self,grade):
+        tempList = []
+        for gradeList in self.classes:
+            if gradeList['grade'] == grade:
+                for div in range(65,ord(gradeList['maxSection'])+1):
+                    pickedClass = str(grade)+str(chr(div))
+                    tempList.append(pickedClass)
+        return tempList
+    
+    # Check is a specific teacher is available during a given period and class
+    def isTeacherAvailable(self,teacher,sub,clas,period):
+        teachers = self.getAvailableTeachers(sub,clas,period)
+        for teach in teachers:
+            if teach['name'] == teacher:
+                return True
+        return False
+    
+    # Returns all the teachers available in a given subject, class and period
+    def getAvailableTeachers(self,sub,clas,period):
+        teachers = self.getSubjectTeachers(sub,clas)[:]
+        temp = teachers[:]
+        for x,teacher in enumerate(teachers):
+            if period not in teacher['availablePeriods']:
+                temp.pop(x)
+        return temp
+
+    # Returns all the teachers teaching a specific subject
+    def getSubjectTeachers(self,sub,clas):
+        tempTeachers = []
+        for teacher in self.teachers:
+            if sum in teacher['subjects'] and clas in teacher['classes']:
+                tempTeachers.append(teacher)
+        return tempTeachers
+
+    # Assign a period to a teacher
+    def setPeriod(self,clas,day,period,subject,teacher,check=True):
+        if check:
+            if self.isTeacherAvailable(teacher,subject,clas,period):
+                self.data[clas][day][period] = {'teacher':teacher,'subject':subject}
+                for x,teach in enumerate(self.teachers):
+                    if teach['name'] == teacher:
+                        self.teachers[x]['availablePeriods'].remove(period)
+                        break
+                return True
+            else:
+                return False
+        else:
+            self.data[clas][day][period] = {'teacher':teacher,'subject':subject}
+            for x,teach in enumerate(self.teachers):
+                    if teach['name'] == teacher:
+                        print(self.teachers[x]['availablePeriods'])
+                        self.teachers[x]['availablePeriods'].remove(period)
+                        break
+            return True

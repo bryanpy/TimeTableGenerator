@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/landing.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <title>TableTimePro</title>
+</head>
+<body>
+    <div id="headerContainer">
+        <div id="headerLogo">
+        </div>  
+        <div class="headerButtonsContainer">
+            <button class="headerButtons">Know More</button>
+            <button class="headerButtons">Hell Naw</button>
+            <button class="headerButtons headerButtonsSpecial">TableTime Pro</button>
+            <button class="headerButtons">About Us</button>
+            <button class="headerButtons">Contact Us</button>
+        </div>
+        <div class="headerButtonsContainer">       
+        </div>
+    </div>
+    <div class="page" style="padding-top:7vh;height:93vh;">
+        <div id="headingContainer">
+            <h1 class="heading">Effortlessly Organize <br> Your Timetable</h1>
+            <p>A web application that helps you effortlessly createand manage your school timetables. <br> With built in capablities to manage teachers and their classes. This software is especially made for Indian Schools in Oman.</p>
+        </div>
+        <button id="launchButton">Generate Timetable</button>
+        <img src="{{ url_for('static', filename='assets/background.jpg') }}" alt="backround" id="background-image">
+        <!-- <h4 id="description">Welcome to TableTimePro, a web application that helps you <br> create and manage your school timetables.</h4> -->
+    </div>
+    
+    <div class="page">
+        <h1>Table TimePro</h1>
+        <p>Welcome to TableTimePro, a web application that helps you create and manage your school timetables.</p>
+    </div>
+</body>
+</html>
