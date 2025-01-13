@@ -3,12 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/landing.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/settings.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <title>Settings</title>
 </head>
-<body>
-    
+<body style="display: flex;">
+    <div id="sideBarContainer">
+        <div class="sideButton">
+            <img src="{{ url_for('static', filename='assets/icons/teacher.png')}}" alt="Practicals">
+            <div class="sideButtonText">Teachers</div>
+        </div>
+        <div class="sideButton">
+            <img src="{{ url_for('static', filename='assets/icons/education.png')}}" alt="Practicals">
+            <div class="sideButtonText">Students</div>
+        </div>
+        <div class="sideButton">
+            <img src="{{ url_for('static', filename='assets/icons/reading-book.png')}}" alt="Practicals">
+            <div class="sideButtonText">Subjects</div>
+        </div>
+        <div class="sideButton">
+            <img src="{{ url_for('static', filename='assets/icons/flask.png')}}" alt="Practicals">
+            <div class="sideButtonText">Practicals</div>
+        </div>
+        <div class="sideButton selectedSideButton">
+            <img src="{{ url_for('static', filename='assets/icons/setting.png')}}" alt="Practicals">
+            <div class="sideButtonText">General</div>
+        </div>
+        
+    </div>
+    <div id="mainContainer">
+        <div id="headerContainer">
+            <div id="headerLogo">
+                <h2>Settings</h2>
+            </div>
+            <div class="headerButtonsContainer">
+                <button class="headerButtons">Know More</button>
+                <button class="headerButtons">Hell Naw</button>
+                <button class="headerButtons">Settings</button>
+            </div>
+        </div>
+        <div id="settingsContainer">
+            <div>
+                <label for="theme">Theme:</label>
+                <select id="theme" name="theme">
+                    <option value="light">Light</option>
+                    <option value="dark">Dark</option>
+                </select>
+                <label for="font">Font:</label>
+                <select id="font" name="font">
+                    <option value="work-sans">Work Sans</option>
+                    <option value="nunito">Nunito</option>
+                </select>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

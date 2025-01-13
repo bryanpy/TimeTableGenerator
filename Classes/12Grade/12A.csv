@@ -1,6 +1,6 @@
 12A,1,2,3,4,5,6,7,8
-Sun,Eng,P_Comp,P_Comp,Chem,Phy,Comp,Skill,Math
-Mon,Comp,Comp,Math,Chem,Phy,Eng,Skill,Math
-Tue,Prac,Prac,Math,Comp,Phy,Eng,Chem,Chem
-Wed,Math,Eng,Math,Comp,Chem,Phy,PE,Chem
-Thu,Chem,Comp,Chem,Phy,Phy,Skill,Math,Eng
+Sun,PE,Eng,Skill,Comp,Math,Phy,Phy,Chem
+Mon,Chem,Skill,Phy,Phy,Math,Eng,Comp,Comp
+Tue,Math,Comp,Math,Eng,Chem,Phy,Phy,Eng
+Wed,Math,Eng,Comp,Eng,Chem,Skill,Comp,Phy
+Thu,Prac,Prac,Phy,P_Comp,P_Comp,Comp,Eng,Math

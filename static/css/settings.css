@@ -1,0 +1,120 @@
+:root{
+    --light-text:hsl(0, 0%, 100%);
+    --blue-text:#4d677d;
+    --mid-text:#343434ec;
+    --text:#1b1b1b;
+    --transparent: rgba(0, 0, 0, 0.75);
+    --darker:#0d1013;
+    --background:#ffffff;
+    --med:#1a2128;
+    --contrast:#c5edff;
+    --mid-contrast:#56b8e6;
+    --light-contrast:#5dcad8;
+}
+
+*{
+    padding: 0;
+    margin: 0;
+}
+
+#mainContainer{
+    width: 85vw;
+    height: 100vh;
+}
+
+#sideBarContainer{
+    width: 15vw;
+    height: 100vh;
+    border-width: 0 2px 0 0;
+    border-color:#91949654;
+    border-style:solid;
+
+    padding:1.5vw
+
+    /* background-color: var(--contrast); */
+}
+
+.sideButton{
+    /* background-color: var(--contrast); */
+    display: flex;
+    flex-direction: row;
+
+    padding: 5px;
+    margin-top: 5px;
+}
+
+.sideButton>div{
+    font-family: "Nunito", sans-serif;
+    font-weight: 400;
+}
+
+.sideButton>div:hover{
+    color: var(--blue-text);
+    cursor: pointer;
+}
+
+.sideButton>img{
+    height: 2.5vh;
+    width:2.5vh;
+}
+
+.selectedSideButton{
+
+}
+
+.selectedSideButton>div{
+    font-weight: bold;
+    color: var(--mid-contrast);
+}
+
+
+
+#headerContainer{
+    display: flex;
+    justify-content: space-between;
+}
+
+.headerButtonsContainer{
+    display: flex;
+}
+
+.headerButtons{
+    background-color: transparent;
+    color: var(--mid-text);
+    height: 6vh;
+    width: 6.4vw;
+
+    cursor: pointer;
+    border: none;
+    
+    font-family: "Nunito", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-size: 0.9vw;
+
+    transition: font-weight 0.1s;
+}
+
+.headerButtons:hover{
+    font-weight: 700;
+}
+
+.headerButtonsSpecial{
+    color: var(--contrast);
+    font-weight: 700;
+    width: auto;
+    font-size: 1.3vw;
+    cursor: pointer;
+    transition: font-weight 0.1s;
+}
+
+.headerButtonsSpecial:hover{
+    font-weight: 800;
+}
+
+#settingsContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}

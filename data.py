@@ -1,17 +1,64 @@
+import mysql.connector as sql
 import csv
 import os
 import copy
 
-class Data:
-    def __init__(self,periodsPerDay,noOfDays):
-        self.noOfDays = noOfDays
-        self.periodsPerDay = periodsPerDay
+class MySqlConnector:
+    def __init__(self):
+        self.host = 'localhost'
+        self.user = 'root'
+        self.password = 'Lmao'
+        
+        self.DB = sql.connect(
+            host=self.host,
+            user=self.user,
+            password=self.password,
+            database='timetable'
+        )
+        self.cursor = self.DB.cursor()
+    
+    def getConfig(self):
+        self.cursor.execute("SELECT fieldName, fieldValue FROM config")
+        result = self.cursor.fetchall()
+        config_data = {row[0]: int(row[1]) for row in result}
+        return config_data
 
-        self.maxClassesInGround = 2
+    def updateOutput(self,data):
+        self.cursor.execute('''DROP TABLE ClassSchedule''')
+        self.cursor.execute('''CREATE TABLE IF NOT EXISTS ClassSchedule(
+            ID INTEGER PRIMARY KEY AUTO_INCREMENT,
+            ClassName TEXT NOT NULL,
+            Day TEXT NOT NULL,
+            Period INTEGER NOT NULL,
+            Subject TEXT NOT NULL
+        )''')
+        self.DB.commit()
+
+        days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri']
+        index = 1
+        for class_name, weekly_schedule in data.items():
+            for day_index, day_schedule in enumerate(weekly_schedule):
+                day = days[day_index]
+                for period, subject in enumerate(day_schedule, start=1):
+                    # print(f"INSERT INTO ClassSchedule VALUES ({index},'{class_name}', '{day}', {period}, '{subject if subject else "idk"}')")
+                    self.cursor.execute(f"INSERT INTO ClassSchedule VALUES ({index},'{class_name}', '{day}', {period}, '{subject if subject else "idk"}')")
+                    index += 1
+        self.DB.commit()
+        self.DB.close()
+
+
+class Data(MySqlConnector):
+    def __init__(self,periodsPerDay,noOfDays):
+        super().__init__()
+        cofigData = self.getConfig()
+
+        self.noOfDays = cofigData['noOfDays']
+        self.periodsPerDay = cofigData['periodsPerDay']
+
+        self.maxClassesInGround = cofigData['maxClassesInGround']
 
         self.days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
         self.ordinals = ['First','Second','Third','Fourth','Fifth','Sixth','Seventh','Eighth','Ninth','Tenth']
-        
 
         # Should get rid of this
         self.emptyPossiblePeriods = [x for x in range(0,periodsPerDay)]
@@ -22,8 +69,9 @@ class Data:
         # List of all classes in the school
         self.classes = [
             {'grade':11,'maxSection':'E'},
-            {'grade':12,'maxSection':'E'}
+            {'grade':12,'maxSection':'E'},
         ]
+        
         self.teachers = ['Karuna','Reshma','Moses','Shafeela','Shruthi','Krithika','Vidhya','Anuradha','Lida','Vijitha','Ashwathy','Deepa','Judith','Shibu','Anitha','Irine','Ameen','Karthik','Ashley','Kavitha','Ruskin']
         self.labs = ['Chem','Phy','Bio','Comp',"SComp"]
 
@@ -51,7 +99,8 @@ class Data:
             {'name':'Vijitha','subject':'Bio','classes':['11C','12C']},
 
             {'name':'Anitha','subject':'Eng','classes':['11A','12A','11B','12B']},
-            {'name':'Irine','subject':'Eng','classes':['11C','12C']},
+            {'name':'Irine','subject':'Eng','classes':['11C','12C']}
+
         ]
 
         self.PEPeriods = [
@@ -290,31 +339,37 @@ class Data:
 
     # Create Empty files to save it later
     def saveAsCSV(self):
-        os.mkdir('Classes')
-        
+        # Check and create the main 'Classes' directory
+        if not os.path.exists('Classes'):
+            os.mkdir('Classes')
+            
         for clas in self.classes:
-            os.chdir('Classes')
-            os.mkdir(str(clas['grade'])+"Grade")
-            os.chdir('../')
+            grade_folder = os.path.join('Classes', f"{clas['grade']}Grade")
+            
+            # Check and create the grade-specific folder
+            if not os.path.exists(grade_folder):
+                os.mkdir(grade_folder)
 
             for classData in self.data:
-                grade = ''.join([i for i in classData if i.isdigit()])
+                grade = ''.join([i for i in classData if i.isdigit()])  
                 
                 if int(grade) == int(clas['grade']):
-                    filePath = "Classes/"+str(grade)+"Grade/"+classData+".csv"
+                    filePath = os.path.join(grade_folder, f"{classData}.csv")
 
+                    # Create and write to the file
                     with open(filePath, 'w', newline='') as file:
                         writer = csv.writer(file)
-
+                        
+                        # Prepare the header
                         header = [classData]
                         for period in range(self.periodsPerDay):
-                            header.append(period+1)
+                            header.append(period + 1)
                         writer.writerow(header)
 
+                        # Prepare the rows
                         temp = []
-                        for index,day in enumerate(self.data[classData]):
-                            temp.append([self.days[index]]+day)
+                        for index, day in enumerate(self.data[classData]):
+                            temp.append([self.days[index]] + day)
 
-                        row_list = temp
-                        writer.writerows(row_list)
+                        writer.writerows(temp)
     # Create a list and return a list of all classes and sections together in the form of a string in list, ie.['11A','11B','12A','12B'].

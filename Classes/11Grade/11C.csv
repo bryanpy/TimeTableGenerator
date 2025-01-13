@@ -1,6 +1,6 @@
 11C,1,2,3,4,5,6,7,8
-Sun,Chem,Phy,Eng,P_Comp,P_Comp,Math,Eng,Comp
-Mon,Skill,Comp,Phy,Math,Math,Eng,Chem,Chem
-Tue,Chem,Math,Phy,Comp,Chem,Eng,Skill,Phy
-Wed,PE,P_Bio,P_Bio,Phy,Math,Eng,Comp,Chem
-Thu,Chem,Phy,Eng,Math,Prac,Prac,Comp,Skill
+Sun,Eng,Eng,Chem,Chem,Math,Phy,Comp,Phy
+Mon,Eng,Phy,Phy,Comp,Chem,Math,Chem,Math
+Tue,Math,Chem,Eng,Skill,Phy,Comp,P_Bio,P_Bio
+Wed,Skill,Eng,Prac,Prac,Phy,Comp,Math,Chem
+Thu,PE,Comp,Eng,Skill,Chem,P_Comp,P_Comp,Math

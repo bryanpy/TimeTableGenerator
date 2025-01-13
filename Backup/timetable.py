@@ -1,72 +1,114 @@
-import random as rand
-from data import *
-import copy
+import {
+  DefaultNavigatorOptions,
+  Descriptor,
+  NavigationHelpers,
+  NavigationProp,
+  ParamListBase,
+  StackNavigationState,
+  StackRouterOptions,
+  StackActionHelpers,
+  RouteProp,
+} from '@react-navigation/native';
+import * as React from 'react';
+import {
+  ImageSourcePropType,
+  StyleProp,
+  ViewStyle,
+  ColorValue,
+} from 'react-native';
+import {
+  ScreenProps,
+  ScreenStackHeaderConfigProps,
+  SearchBarProps,
+  SheetDetentTypes,
+} from 'react-native-screens';
 
-class Timetable(Data):
-    def __init__(self,periodsPerDay,noOfDays):
-        super().__init__(periodsPerDay,noOfDays)
+export type NativeStackNavigationEventMap = {
+  /**
+   * Event which fires when the screen appears.
+   *
+   * @deprecated Use `transitionEnd` event with `data.closing: false` instead.
+   */
+  appear: { data: undefined };
+  /**
+   * Event which fires when the current screen is dismissed by hardware back (on Android) or dismiss gesture (swipe back or down).
+   */
+  dismiss: { data: undefined };
+  /**
+   * Event which fires when a transition animation starts.
+   */
+  transitionStart: { data: { closing: boolean } };
+  /**
+   * Event which fires when a transition animation ends.
+   */
+  transitionEnd: { data: { closing: boolean } };
+  /**
+   * Event which fires when a swipe back is canceled on iOS.
+   */
+  gestureCancel: { data: undefined };
+  /**
+   * Event which fires when a header height gets changed.
+   */
+  headerHeightChange: { data: { headerHeight: number } };
+};
 
-    # Assign skill period for a specific grade together
-    def assignSkillPeriod(self):
-        classes = self.getListClasses().copy()
-        for period in self.skillSubjectPeriods:
-            self.skillDay = [False for x in range(0,self.noOfDays)]
-            for x in range(period['periodsPerWeek']):
-                choosenPeriod = rand.choice(self.getSkillAcailablity())
-                for section in self.getListOfSections(period['grade']):
-                    self.data[section][choosenPeriod[0]][choosenPeriod[1]] = period['subject']
-                    self.skillAvailability[choosenPeriod[0]][choosenPeriod[1]] = True
-                    self.skillDay[choosenPeriod[0]] = True
-                    for teacher in period['teachers']:
-                        self.teacherAvailablity[teacher][self.days[choosenPeriod[0]]][choosenPeriod[1]] = section
+export type NativeStackNavigationProp<
+  ParamList extends ParamListBase,
+  RouteName extends keyof ParamList = string
+> = NavigationProp<
+  ParamList,
+  RouteName,
+  StackNavigationState<ParamList>,
+  NativeStackNavigationOptions,
+  NativeStackNavigationEventMap
+> &
+  StackActionHelpers<ParamList>;
 
-    def assignPEPeriod(self):
-        for subject in self.PEPeriods:
-            for classes in subject['classes']:
-                choosenPeriod = rand.choice(self.removeOccupiedPE(self.getFullGroundAvailablity(False),classes))
-                for section in classes:
-                    if self.data[section][choosenPeriod[0]][choosenPeriod[1]]:
-                        raise Exception("Place Already taken by Skill, if this come then -4hrs by debugging")
-                    self.data[section][choosenPeriod[0]][choosenPeriod[1]] = subject['subject']
-                    self.teacherAvailablity[subject['teacher']][self.days[choosenPeriod[0]]][choosenPeriod[1]] = section
-                    self.addGroundPeriod(choosenPeriod[0],choosenPeriod[1],2)
+export type NativeStackScreenProps<
+  ParamList extends ParamListBase,
+  RouteName extends keyof ParamList = string
+> = {
+  navigation: NativeStackNavigationProp<ParamList, RouteName>;
+  route: RouteProp<ParamList, RouteName>;
+};
 
-    # Assigning special periods like pe
-    def assignSpecialPeriods(self):
-        self.assignSkillPeriod()
-        self.assignPEPeriod()
-    
-    # Print the time table along with the classes and days
-    def printTimetable(self,plain = False):
-        """Prints the Generated Time Table.
-        Args:
-            plain::bool
-                Wheather to print plain or with only the subjects
-        """
-        for x in self.data:
-            print("--",x,"--")
-            temp = []
-            if not plain:
-                for i,y in enumerate(self.data[x]):
-                    for z in y:
-                        try:
-                            temp.append(z['subject'])
-                        except:
-                            temp.append(z)
-                    print(self.days[i],temp," -",temp.count(""))
-                    temp = []
-            else:
-                for x in self.data:
-                    for y in self.data[x]:
-                        print(y," -",temp.count(""))
-                    print()
-            print("\n")
+export type NativeStackNavigationHelpers = NavigationHelpers<
+  ParamListBase,
+  NativeStackNavigationEventMap
+>;
 
-    # Main Generating Function
-    def generateTimetable(self):
-        # print(self.teachers[0])
+// We want it to be an empty object beacuse navigator does not have any additional config
+// eslint-disable-next-line @typescript-eslint/ban-types
+export type NativeStackNavigationConfig = {};
 
-        self.assignSpecialPeriods()
-        # self.assignSubjectsAccTeachers()
-        # self.getPossibleIndexes()
-        # print(self.setPeriod('11A',0,0,'pe','Karthik'))
+export type NativeStackNavigationOptions = {
+  /**
+   * Image to display in the header as the back button.
+   * Defaults to back icon image for the platform (a chevron on iOS and an arrow on Android).
+   */
+  backButtonImage?: ImageSourcePropType;
+  /**
+   * Whether to show the back button with custom left side of the header.
+   */
+  backButtonInCustomView?: boolean;
+  /**
+   * Style object for the scene content.
+   */
+  contentStyle?: StyleProp<ViewStyle>;
+  /**
+   * Boolean indicating that swipe dismissal should trigger animation provided by `stackAnimation`. Defaults to `false`.
+   *
+   * @platform ios
+   */
+  customAnimationOnSwipe?: boolean;
+  /**
+   * Whether the stack should be in rtl or ltr form.
+   */
+  direction?: 'rtl' | 'ltr';
+  /**
+   * Boolean indicating whether to show the menu on longPress of iOS >= 14 back button.
+   * @platform ios
+   */
+  disableBackButtonMenu?: boolean;
+  /**
+   * Whether inactive screens should be suspended from re-rendering. Defaults t

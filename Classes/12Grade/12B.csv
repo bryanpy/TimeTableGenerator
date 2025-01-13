@@ -1,6 +1,6 @@
 12B,1,2,3,4,5,6,7,8
-Sun,Chem,Chem,Comp,Eng,Phy,Eng,Skill,Math
-Mon,Eng,Chem,Math,Math,Comp,Chem,Skill,Phy
-Tue,Math,Eng,P_Comp,P_Comp,Chem,Comp,Phy,Chem
-Wed,Chem,Math,Phy,Math,Eng,Comp,PE,Phy
-Thu,Comp,Prac,Prac,P_Bio,P_Bio,Skill,Eng,Chem
+Sun,PE,Comp,Skill,Eng,Phy,Chem,Math,Chem
+Mon,Comp,Skill,Math,Chem,Prac,Prac,Chem,Math
+Tue,Eng,Phy,Math,Chem,Comp,Phy,Eng,Math
+Wed,Phy,Chem,Comp,Math,Eng,Skill,P_Comp,P_Comp
+Thu,Comp,P_Bio,P_Bio,Eng,Comp,Chem,Phy,Math
