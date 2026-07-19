@@ -39,7 +39,7 @@ If you use this software or find the methodology useful, please cite my publishe
 
 
 
-## 🛠️ Architecture & Project Structure
+## Architecture & Project Structure
 
 The project separates core scheduling mechanics and file handling rules from the frontend visualization structure:
 
