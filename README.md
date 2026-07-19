@@ -3,7 +3,7 @@
 An automated, web based scheduling application designed to generate optimized, collision free academic timetables. The application utilizes a Python driven backtracking constraint layout engine, leverages a MySQL backend to keep track of configuration boundaries, and exports processed tables to local CSV frameworks.
 
   
-## 📚 Publication
+## Publication
 
 If you use this software or find the methodology useful, please cite my published paper:
 
@@ -30,7 +30,7 @@ If you use this software or find the methodology useful, please cite my publishe
 
 
 
-## 🚀 Features
+## Features
 
 - **Constraint-Based Scheduling Engine:** Automatically maps out weekly timetables while dynamically managing overlapping restrictions (e.g., teacher availability, consecutive practical lab sessions, and shared ground access).
 - **Database-Driven Configuration:** Integrates with a MySQL backend to dynamically inherit variables like periods per day, active school days, and classroom thresholds.
@@ -62,7 +62,7 @@ The project separates core scheduling mechanics and file handling rules from the
 
 
 
-## 📋 Data Engine Design Principles
+## Data Engine Design Principles
 
 The application relies on a cascading execution model that strictly checks parameters before mapping structural elements into the array:
 
@@ -72,7 +72,7 @@ The application relies on a cascading execution model that strictly checks param
 
 
 
-## ⚙️ Setup & Installation
+## Setup & Installation
 
 ### 1. Prerequisites
 
@@ -98,7 +98,7 @@ INSERT INTO config (fieldName, fieldValue) VALUES
 ('maxClassesInGround', '2');
 ```
 
-> 🔑 **Note:** Update the connection parameters inside the initialization function of the `MySqlConnector` class (`host`, `user`, `password`) to match your local database authentication credentials.
+> **Note:** Update the connection parameters inside the initialization function of the `MySqlConnector` class (`host`, `user`, `password`) to match your local database authentication credentials.
 
 ### 3. Install Requirements
 
@@ -118,7 +118,7 @@ python app.py
 
 > (Replace `app.py` with the exact name of your main UI server file if named differently)
 
-## 📄 Output Generation
+## Output Generation
 
 When a complete layout passes all verification conditions:
 
